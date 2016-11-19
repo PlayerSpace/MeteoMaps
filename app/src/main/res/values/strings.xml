@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Meteo Mappe</string>
+    <string name="weather_api">e4dc66b316a46b96910367017313d1d7</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="action_info">Info e credits</string>
+    <string name="dummy_section_text">Section %1d is just a dummy section.</string>
+
+    <string name="demo_external_activity">Demo External Activity</string>
+    <string name="demo_collection">Demo Collection</string>
+    <string name="title_activity_maps">Cartina</string>
+
+    <string name="cambio_punto_osservazione">Vuoi vedere le previsioni per il punto selezionato?</string>
+    <string name="dialog_title">Conferma cambio di osservazione</string>
+
+    <string name="info_descr">L\'applicazione ha lo scopo di fornire in forma grafica le previsioni
+    meteorologiche della località in cui essa viene eseguita e delle zone limitrofe. Essa permette
+        di scegliere una nuova località sulla mappa, semplicemente cliccando su un punto della mappa;  ha anche
+        una funzione di ricerca, presente nella mappa stessa, per ottenere le previsioni meteo di una qualunque
+        località censita in Google Maps.
+    </string>
+    <string name="info_credits"></string>
+</resources>
