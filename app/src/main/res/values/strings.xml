@@ -15,9 +15,9 @@
     <string name="dialog_title">Conferma cambio di osservazione</string>
 
     <string name="info_descr">L\'applicazione ha lo scopo di fornire in forma grafica le previsioni
-    meteorologiche della località in cui essa viene eseguita e delle zone limitrofe. Essa permette
-        di scegliere una nuova località sulla mappa, semplicemente cliccando su un punto della mappa;  ha anche
-        una funzione di ricerca, presente nella mappa stessa, per ottenere le previsioni meteo di una qualunque
+    meteorologiche della località ove viene eseguita e delle zone limitrofe. Permette anche
+        di scegliere una nuova località, semplicemente cliccando su un punto della mappa e ha anche
+        una funzione di ricerca, per ottenere le previsioni meteo di una qualunque
         località censita in Google Maps.
     </string>
     <string name="info_credits"></string>

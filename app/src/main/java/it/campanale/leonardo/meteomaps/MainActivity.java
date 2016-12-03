@@ -85,7 +85,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     public static List<List<Meteo>> meteos = new ArrayList<>();
     public static String weather_api = "";
 
-    private static boolean checkedPermission=false;
+    // private static boolean checkedPermission=false;
 
     public void updateViews() {
         MyHandler mHandler = new MyHandler(this);
@@ -156,9 +156,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    /*
                     if (checkedPermission)
                         return;
-                    checkedPermission=true;
+                    checkedPermission=true;   */
                     //   Toast.makeText(this.getActivity(), " chiamo servizi di localizzazione..", Toast.LENGTH_LONG).show();
                     buildGoogleApiClient();
                     createLocationRequest();
