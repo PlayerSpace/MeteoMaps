@@ -60,9 +60,9 @@ public class MarkerHandler extends Handler {
                                                   public void onClick(DialogInterface dialog, int id) {
                                                       // User clicked OK button
 
-                                                      main.mLastLocation = new Location("");
-                                                      main.mLastLocation.setLatitude(marker.getPosition().latitude);
-                                                      main.mLastLocation.setLongitude(marker.getPosition().longitude);
+                                                      MainActivity.mLastLocation = new Location("");
+                                                      MainActivity.mLastLocation.setLatitude(marker.getPosition().latitude);
+                                                      MainActivity.mLastLocation.setLongitude(marker.getPosition().longitude);
                                                       main.updateViews();
                                                   }
                                               });

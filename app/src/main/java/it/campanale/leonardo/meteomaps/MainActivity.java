@@ -5,6 +5,7 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -269,7 +270,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     private void startLocationUpdates() {
 
-        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 108);
+      //  requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 108);
         LocationServices.FusedLocationApi.
                 requestLocationUpdates(mGoogleApiClient,
                         mLocationRequest, this);
@@ -288,13 +289,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     public void onConnected(Bundle bundle) {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
+         /*
         if (mLastLocation != null) {
-            /*
+
             Toast.makeText(this.getActivity(), "Posizione: " + String.valueOf(mLastLocation.getLatitude())+ ","+
                     String.valueOf(mLastLocation.getLongitude()), Toast.LENGTH_LONG).show();
-                    */
-        }
 
+        }
+   */
         startLocationUpdates();
         mHandler = new MyHandler(this);
         if (mLastLocation != null) {
@@ -412,7 +414,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
 
-    public class MyHandler extends Handler {
+    public  class MyHandler extends Handler {
         FragmentActivity c;
 
         public MyHandler(FragmentActivity c) {
@@ -561,7 +563,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                                                     e.printStackTrace();
                                                 }
                                                 if (newPos.longitude != 0 && newPos.latitude != 0) {
-                                                    main.mLastLocation = new Location("");
+                                                    MainActivity.mLastLocation = new Location("");
                                                     mLastLocation.setLatitude(newPos.latitude);
                                                     mLastLocation.setLongitude(newPos.longitude);
                                                     main.updateViews();
@@ -616,7 +618,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                                                    public void onClick(DialogInterface dialog, int id) {
                                                        // User clicked OK button
 
-                                                       main.mLastLocation = new Location("");
+                                                       MainActivity.mLastLocation = new Location("");
                                                        mLastLocation.setLatitude(latLng.latitude);
                                                        mLastLocation.setLongitude(latLng.longitude);
                                                        main.updateViews();
@@ -679,8 +681,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         public Bitmap resizeMapIcons(int iconId, int width, int height) {
             Bitmap imageBitmap = BitmapFactory.decodeResource(getResources(), iconId);
             // getResources()..getIdentifier(iconName, "drawable", getPackageName()));
-            Bitmap resizedBitmap = Bitmap.createScaledBitmap(imageBitmap, width, height, false);
-            return resizedBitmap;
+            return  Bitmap.createScaledBitmap(imageBitmap, width, height, false);
+
         }
 
     }
