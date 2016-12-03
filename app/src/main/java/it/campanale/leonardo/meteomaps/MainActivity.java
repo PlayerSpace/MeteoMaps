@@ -19,6 +19,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -26,6 +28,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,7 +82,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 
     public static List<List<Meteo>> meteos = new ArrayList<>();
-    public static String weather_api="";
+    public static String weather_api = "";
+
+    private static boolean checkedPermission=false;
 
     public void updateViews() {
         MyHandler mHandler = new MyHandler(this);
@@ -106,39 +111,95 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.hide(); // per aspettare che vengano i dati dal thread
 
-        //   Toast.makeText(this.getActivity(), " chiamo servizi di localizzazione..", Toast.LENGTH_LONG).show();
-        buildGoogleApiClient();
-        createLocationRequest();
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 108);
             }
             return;
         } else {
-            //continueYourTask
-        }
-        if (!isGPSEnabled(this)) {
+            /// If request is cancelled, the result arrays are empty.
 
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setMessage("GPS non attivo. Devo attivarlo?");
-            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //this will navigate user to the device location settings screen
-                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(intent);
-                }
-            });
-            AlertDialog alert = dialog.create();
-            alert.show();
+            //   Toast.makeText(this.getActivity(), " chiamo servizi di localizzazione..", Toast.LENGTH_LONG).show();
+            buildGoogleApiClient();
+            createLocationRequest();
 
+            if (!isGPSEnabled(this)) {
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                dialog.setMessage("GPS non attivo. Devo attivarlo?");
+                dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //this will navigate user to the device location settings screen
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(intent);
+                    }
+                });
+                AlertDialog alert = dialog.create();
+                alert.show();
+
+            }
         }
 
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 108: {
+
+               // Log.d("requestpermissioresult", "onRequestPermissionsResult: ");
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (checkedPermission)
+                        return;
+                    checkedPermission=true;
+                    //   Toast.makeText(this.getActivity(), " chiamo servizi di localizzazione..", Toast.LENGTH_LONG).show();
+                    buildGoogleApiClient();
+                    createLocationRequest();
+
+                    if (!isGPSEnabled(this)) {
+
+                        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                        dialog.setMessage("GPS non attivo. Devo attivarlo?");
+                        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //this will navigate user to the device location settings screen
+                                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(intent);
+                            }
+                        });
+                        AlertDialog alert = dialog.create();
+                        alert.show();
+
+                    }
+
+                } else {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                    dialog.setMessage("Questa applicazione necessita di accedere ai servizi di localizzazione per poter funzionare ");
+                    dialog.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //this will navigate user to the device location settings screen
+                           finish();
+                        }
+                    });
+                    AlertDialog alert = dialog.create();
+                    alert.show();
+                    // this.finish();
+                }
+                return;
+            }
+        }
+
+    }
 
     public boolean isGPSEnabled(Context mContext) {
         LocationManager lm = (LocationManager)
@@ -215,7 +276,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
     private void stopLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        if (mGoogleApiClient!=null)
+         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
 
         /*(),
                 mGoogleApiClient,
@@ -307,7 +369,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
                 Toast.makeText(this.main, "Puoi scegliere un punto sulla mappa o cercare una località ", Toast.LENGTH_LONG).show();
 
-                return new MyMapsFragment(main);
+                return new MyMapsFragment().setMain(main);
             } else if (i == mCount - 1) {
 
 
@@ -453,11 +515,22 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     public static class MyMapsFragment extends com.google.android.gms.maps.SupportMapFragment implements OnMapReadyCallback {
 
         private GoogleMap mMap;
+
+
         private MainActivity main;
         private SearchView edit;
 
+        public MyMapsFragment() {
+        }
+
+        /*
         public MyMapsFragment(MainActivity main) {
             this.main = main;
+        }
+        */
+        public MyMapsFragment setMain(MainActivity main) {
+            this.main = main;
+            return this;
         }
 
         @Override
@@ -571,8 +644,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 // USATO UN THREAD CON HANDLER
                 MarkerHandler mHandler2 = new MarkerHandler(mMap, main);
 
-                    Thread t = new Thread(new GetNearPositionsThread(mypos, mHandler2));
-                    t.start();
+                Thread t = new Thread(new GetNearPositionsThread(mypos, mHandler2));
+                t.start();
 
 
 /*
